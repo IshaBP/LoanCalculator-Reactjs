@@ -13,18 +13,35 @@ import { getLabel } from "../utils";
 const LoanInterestCalculator = () => {
   const classes = CalculatorStyle();
 
+  /**
+   * State variables.
+   */
   const [amount, setAmount] = useState(LIMITS.minLoanAmount);
   const [duration, setDuration] = useState(LIMITS.minDuration);
   const [interestRate, setInterestRate] = useState();
   const [monthlyPayment, setMonthlyPayment] = useState();
   const [chipData, setChipData] = React.useState([]);
 
+  /**
+   * Amount change event handler.
+   * @param {Object} event - The slider change event
+   * @param {number} amountValue - The slider change value
+   */
   const onAmountChange = (event, amountValue) => {
     setAmount(amountValue);
   };
+  /**
+   * Duration change event handler.
+   * @param {Object} event - The slider change event
+   * @param {number} durationValue - The slider change value
+   */
   const onDurationChange = (event, durationValue) => {
     setDuration(durationValue);
   };
+  /**
+   * Update Local Storage and Chips.
+   * @param {Object} config - The new config object.
+   */
   const updateLocalStorageAndChips = config => {
     let configHistory = [];
     configHistory = JSON.parse(localStorage.getItem("configHistory") || "[]");
@@ -46,6 +63,11 @@ const LoanInterestCalculator = () => {
     console.log(newChipData);
     setChipData(chipData.push(newChipData));
   };
+  /**
+   * On amount or duration change:
+   * 1) Fetch interest rate, monthly payment
+   * 2) Update local storage & chips
+   */
   useEffect(() => {
     getPaymentDetails(amount, duration).then(res => {
       setInterestRate(res.data.interestRate);
@@ -61,6 +83,9 @@ const LoanInterestCalculator = () => {
     });
   }, [amount, duration]);
 
+  /**
+   * Loan Interest Calculator Component.
+   */
   return (
     <Grid
       container

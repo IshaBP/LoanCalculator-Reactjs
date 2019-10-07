@@ -6,8 +6,18 @@ import Typography from "@material-ui/core/Typography";
 import { PrettySliderStyle } from "../styles/CustomSliderStyles";
 import { getLabel } from "../utils";
 
+/**
+ * Slider with customized style.
+ */
 const PrettySlider = withStyles(PrettySliderStyle)(Slider);
 
+/**
+ * Get marked values on the Slider - min & max.
+ * @param {Object} unit - The structure of unit for values.
+ * @param {number} max - The upper limit of allowed values.
+ * @param {number} min - The lower limit of allowed values.
+ * @returns {Array} - Array of marked values on the Slider.
+ */
 const getMarks = (unit, min, max) => {
   return [
     {
@@ -21,6 +31,9 @@ const getMarks = (unit, min, max) => {
   ];
 };
 
+/**
+ * CustomSlider Component - Label & Slider.
+ */
 const CustomSlider = ({
   max,
   min,
@@ -48,6 +61,9 @@ const CustomSlider = ({
   );
 };
 
+/**
+ * CustomSlider - PropTypes
+ */
 CustomSlider.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
@@ -60,6 +76,9 @@ CustomSlider.propTypes = {
   onChange: PropTypes.func
 };
 
+/**
+ * CustomSlider - Default Props
+ */
 CustomSlider.defaultProps = {
   min: 0,
   max: 100,
