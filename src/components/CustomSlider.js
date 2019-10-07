@@ -37,7 +37,6 @@ const CustomSlider = ({
       <br />
       <PrettySlider
         defaultValue={min}
-        valueLabelDisplay="auto"
         valueLabelDisplay="on"
         marks={getMarks(unit, min, max)}
         min={min}

@@ -7,5 +7,8 @@ export const CalculatorStyle = makeStyles(theme => ({
   },
   margin: {
     height: theme.spacing(3)
+  },
+  paperContainer: {
+    backgroundColor: "#28304C"
   }
 }));

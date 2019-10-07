@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
-import CustomSlider from "../components/CustomSlider";
-import { AMOUNTUNIT, DURATIONUNIT, LIMITS } from "../constants/constants";
 import Grid from "@material-ui/core/Grid";
-import { CalculatorStyle } from "../styles/CalculatorStyles";
-import { getPaymentDetails } from "../services/LoanService";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Chip from "@material-ui/core/Chip";
+import CustomSlider from "../components/CustomSlider";
+import { AMOUNTUNIT, DURATIONUNIT, LIMITS } from "../constants/constants";
+import { CalculatorStyle } from "../styles/CalculatorStyles";
+import { getPaymentDetails } from "../services/LoanService";
 import { getLabel } from "../utils";
 
-const styles = {
-  paperContainer: {
-    backgroundColor: "#28304C"
-  }
-};
-
-const LoanInterestCalculator = props => {
+const LoanInterestCalculator = () => {
   const classes = CalculatorStyle();
 
   const [amount, setAmount] = useState(LIMITS.minLoanAmount);
@@ -28,11 +22,30 @@ const LoanInterestCalculator = props => {
   const onAmountChange = (event, amountValue) => {
     setAmount(amountValue);
   };
-
   const onDurationChange = (event, durationValue) => {
     setDuration(durationValue);
   };
+  const updateLocalStorageAndChips = config => {
+    let configHistory = [];
+    configHistory = JSON.parse(localStorage.getItem("configHistory") || "[]");
+    console.log(configHistory, config);
+    configHistory.unshift(config);
+    localStorage.setItem("configHistory", JSON.stringify(configHistory));
 
+    let newChipData = [];
+    configHistory.forEach(configObject => {
+      newChipData.push({
+        key: configObject,
+        label: `${getLabel(AMOUNTUNIT, configObject.amount)} - ${getLabel(
+          DURATIONUNIT,
+          configObject.duration
+        )}`
+      });
+    });
+
+    console.log(newChipData);
+    setChipData(chipData.push(newChipData));
+  };
   useEffect(() => {
     getPaymentDetails(amount, duration).then(res => {
       setInterestRate(res.data.interestRate);
@@ -44,26 +57,7 @@ const LoanInterestCalculator = props => {
         interestRate: res.data.interestRate,
         monthlyPayment: res.data.monthlyPayment.amount
       };
-
-      let configHistory = [];
-      configHistory = JSON.parse(localStorage.getItem("configHistory") || "[]");
-      console.log(configHistory, newConfig);
-      configHistory.unshift(newConfig);
-      localStorage.setItem("configHistory", JSON.stringify(configHistory));
-
-      let newChipData = [];
-      configHistory.forEach(configObject => {
-        newChipData.push({
-          key: configObject,
-          label: `${getLabel(AMOUNTUNIT, configObject.amount)} - ${getLabel(
-            DURATIONUNIT,
-            configObject.duration
-          )}`
-        });
-      });
-
-      console.log(newChipData);
-      setChipData(chipData.push(newChipData));
+      updateLocalStorageAndChips(newConfig);
     });
   }, [amount, duration]);
 
@@ -74,7 +68,7 @@ const LoanInterestCalculator = props => {
       alignItems="center"
       justify="center"
       style={{ minHeight: "100vh" }}
-      style={styles.paperContainer}
+      // style={styles.paperContainer}
     >
       <Paper className={classes.root} elevation={10}>
         <div className={classes.margin} />
@@ -107,7 +101,5 @@ const LoanInterestCalculator = props => {
     </Grid>
   );
 };
-
-LoanInterestCalculator.propTypes = {};
 
 export default LoanInterestCalculator;
