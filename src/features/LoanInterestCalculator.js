@@ -24,19 +24,30 @@ const LoanInterestCalculator = () => {
 
   /**
    * Amount change event handler.
-   * @param {Object} event - The slider change event
-   * @param {number} amountValue - The slider change value
+   * @param {Object} event - The slider change event.
+   * @param {number} amountValue - The slider change value.
    */
   const onAmountChange = (event, amountValue) => {
     setAmount(amountValue);
   };
   /**
    * Duration change event handler.
-   * @param {Object} event - The slider change event
-   * @param {number} durationValue - The slider change value
+   * @param {Object} event - The slider change event.
+   * @param {number} durationValue - The slider change value.
    */
   const onDurationChange = (event, durationValue) => {
     setDuration(durationValue);
+  };
+  /**
+   * Previous data peek.
+   * @param {Object} data - The object containing previous data configuration.
+   */
+  const handleClickPrevData = data => () => {
+    console.log(data);
+    setAmount(data.key.amount);
+    setDuration(data.key.duration);
+    setInterestRate(data.key.interestRate);
+    setMonthlyPayment(data.key.monthlyPayment);
   };
   /**
    * Update Local Storage and Chips.
@@ -45,12 +56,26 @@ const LoanInterestCalculator = () => {
   const updateLocalStorageAndChips = config => {
     let configHistory = [];
     configHistory = JSON.parse(localStorage.getItem("configHistory") || "[]");
-    console.log(configHistory, config);
+    /*     if (
+      configHistory.some(
+        configObject =>
+          configObject.amount === config.amount &&
+          configObject.duration === config.duration
+      )
+    ) {
+      deleteConfig()
+    } */
+    configHistory = configHistory.filter(function(configObject) {
+      return (
+        configObject.amount !== config.amount ||
+        configObject.duration !== config.duration
+      );
+    });
     configHistory.unshift(config);
     localStorage.setItem("configHistory", JSON.stringify(configHistory));
 
     let newChipData = [];
-    configHistory.forEach(configObject => {
+    configHistory.forEach((configObject, index) => {
       newChipData.push({
         key: configObject,
         label: `${getLabel(AMOUNTUNIT, configObject.amount)} - ${getLabel(
@@ -60,8 +85,7 @@ const LoanInterestCalculator = () => {
       });
     });
 
-    console.log(newChipData);
-    setChipData(chipData.push(newChipData));
+    setChipData(newChipData);
   };
   /**
    * On amount or duration change:
@@ -118,10 +142,14 @@ const LoanInterestCalculator = () => {
         <Typography variant="h4">{monthlyPayment}</Typography>
         <Divider />
         {chipData &&
-          chipData.map(data => {
-            return <Chip key={data.key} label={data.label} />;
-          })}
-        {localStorage.getItem("configHistory")}
+          chipData.map(data => (
+            <Chip
+              key={data.key}
+              label={data.label}
+              clickable
+              onClick={handleClickPrevData(data)}
+            />
+          ))}
       </Paper>
     </Grid>
   );

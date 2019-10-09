@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
@@ -43,6 +43,8 @@ const CustomSlider = ({
   onChange,
   ...otherProps
 }) => {
+  const [sliderValue, setSliderValue] = useState(value);
+  
   return (
     <div>
       <Typography variant="h4">{label}</Typography>
@@ -54,6 +56,7 @@ const CustomSlider = ({
         marks={getMarks(unit, min, max)}
         min={min}
         max={max}
+        value={value}
         onChangeCommitted={onChange}
         {...otherProps}
       />
