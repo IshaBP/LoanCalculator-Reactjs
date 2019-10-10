@@ -81,6 +81,8 @@ const LoanInterestCalculator = () => {
       });
     });
 
+    newChipData.shift()
+
     setChipData(newChipData);
   };
   /**
