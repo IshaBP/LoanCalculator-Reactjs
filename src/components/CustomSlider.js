@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
@@ -39,15 +39,34 @@ const CustomSlider = ({
   min,
   unit,
   label,
-  value,
-  onChange,
+  value: valueProp,
+  onChange: onChangeProp,
   ...otherProps
 }) => {
-  const [sliderValue, setSliderValue] = useState(value);
-  
+  /**
+   * State variable.
+   */
+  const [sliderValue, setSliderValue] = useState(valueProp);
+
+  /**
+   * On valueProp change set Slider value.
+   */
+  useEffect(() => {
+    setSliderValue(valueProp);
+  }, [valueProp]);
+  /**
+   * Handle change of slider value.
+   */
+  const onChange = (event, value) => {
+    setSliderValue(value);
+  };
+
+  /**
+   * CustomSlider Component.
+   */
   return (
     <div>
-      <Typography variant="h4">{label}</Typography>
+      <Typography variant="h5">{label}</Typography>
       <br />
       <br />
       <PrettySlider
@@ -56,8 +75,9 @@ const CustomSlider = ({
         marks={getMarks(unit, min, max)}
         min={min}
         max={max}
-        value={value}
-        onChangeCommitted={onChange}
+        value={sliderValue}
+        onChange={onChange}
+        onChangeCommitted={onChangeProp}
         {...otherProps}
       />
     </div>

@@ -1,5 +1,6 @@
 /**
  * Min - Max limits for Values.
+ * @constant
  */
 const LIMITS = {
   minLoanAmount: 500,
@@ -10,6 +11,7 @@ const LIMITS = {
 
 /**
  * Amount unit.
+ * @constant
  */
 const AMOUNTUNIT = {
   symbol: "$",
@@ -18,6 +20,7 @@ const AMOUNTUNIT = {
 
 /**
  * Duration unit.
+ * @constant
  */
 const DURATIONUNIT = {
   symbol: "months",

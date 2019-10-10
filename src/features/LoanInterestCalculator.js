@@ -51,26 +51,22 @@ const LoanInterestCalculator = () => {
   };
   /**
    * Update Local Storage and Chips.
+   * 1) Keep only one instance of object in history, the most recent one.
+   * 2) Maximum 12 history items for readability.
    * @param {Object} config - The new config object.
    */
   const updateLocalStorageAndChips = config => {
     let configHistory = [];
     configHistory = JSON.parse(localStorage.getItem("configHistory") || "[]");
-    /*     if (
-      configHistory.some(
-        configObject =>
-          configObject.amount === config.amount &&
-          configObject.duration === config.duration
-      )
-    ) {
-      deleteConfig()
-    } */
     configHistory = configHistory.filter(function(configObject) {
       return (
         configObject.amount !== config.amount ||
         configObject.duration !== config.duration
       );
     });
+    if (configHistory.length >= 12) {
+      configHistory.pop();
+    }
     configHistory.unshift(config);
     localStorage.setItem("configHistory", JSON.stringify(configHistory));
 
@@ -108,19 +104,13 @@ const LoanInterestCalculator = () => {
   }, [amount, duration]);
 
   /**
-   * Loan Interest Calculator Component.
+   * LoanInterestCalculator Component.
    */
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justify="center"
-      style={{ minHeight: "100vh" }}
-      // style={styles.paperContainer}
-    >
+    <Grid container justify="center" className={classes.component}>
       <Paper className={classes.root} elevation={10}>
         <div className={classes.margin} />
+
         <CustomSlider
           min={LIMITS.minLoanAmount}
           max={LIMITS.maxLoanAmount}
@@ -129,7 +119,9 @@ const LoanInterestCalculator = () => {
           label="Loan Amount"
           onChange={onAmountChange}
         />
+
         <div className={classes.margin} />
+
         <CustomSlider
           min={LIMITS.minDuration}
           max={LIMITS.maxDuration}
@@ -138,9 +130,19 @@ const LoanInterestCalculator = () => {
           label="Loan Duration"
           onChange={onDurationChange}
         />
-        <Typography variant="h4">{interestRate}</Typography>
-        <Typography variant="h4">{monthlyPayment}</Typography>
-        <Divider />
+
+        <Typography variant="h5">
+          Interest Rate:{"\t"}
+          {interestRate}
+        </Typography>
+
+        <Typography variant="h5">
+          Monthly Payment:{"\t"}
+          {monthlyPayment}
+        </Typography>
+
+        <Divider variant="middle" className={classes.divider} />
+
         {chipData &&
           chipData.map(data => (
             <Chip
@@ -148,6 +150,8 @@ const LoanInterestCalculator = () => {
               label={data.label}
               clickable
               onClick={handleClickPrevData(data)}
+              className={classes.chip}
+              variant="outlined"
             />
           ))}
       </Paper>
