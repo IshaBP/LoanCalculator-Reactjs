@@ -1,6 +1,8 @@
 # Loan Interest Calculator
 
-An app that allows a user to enter a loan amount and a loan duration in months which then displays the interest rate and the monthly payment.
+An app that allows a user to enter a loan amount and a loan duration in months which then displays the interest rate and the monthly payment.<br/>
+The API returns a JSON object with information about the monthly payment and the interest rates.<br/>
+The loan amount should be between \$500 and \$5000 and the loan duration between 6 and 24 months.
 
 ### Live Demo: https://loan-interest-calculator-react-ishabp.netlify.com/
 
@@ -12,11 +14,6 @@ An app that allows a user to enter a loan amount and a loan duration in months w
 ### Hosted With
 
 - [Netlify](https://www.netlify.com/) - For continuous deployment from Git
-
-### API: `https://ftl-frontend-test.herokuapp.com/interest?amount=<amount>&numMonths=<numMonths>`
-
-This returns a JSON object with information about the monthly payment and the interest rates.<br/>
-The loan amount should be between \$500 and \$5000 and the loan duration between 6 and 24 months.
 
 ### To get this project up and running on your local machine:
 
