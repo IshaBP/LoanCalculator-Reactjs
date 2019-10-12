@@ -1,6 +1,7 @@
 # Loan Interest Calculator
 
 An app that allows a user to enter a loan amount and a loan duration in months which then displays the interest rate and the monthly payment.<br/>
+The recent searches are stored and fetched from localStorage.<br/>
 The API returns a JSON object with information about the monthly payment and the interest rates.<br/>
 The loan amount should be between \$500 and \$5000 and the loan duration between 6 and 24 months.
 
